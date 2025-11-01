@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educycle v2 - Inline (CSS+JS)</title>
+  <style>
+/* Embedded CSS - professional blue & white */
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+body{background:#f7f9fc;color:#0f172a;min-height:100vh;display:flex;flex-direction:column}
+header.navbar{display:flex;justify-content:space-between;align-items:center;background:#ffffff;border-bottom:1px solid #e2e8f0;padding:12px 40px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.logo{font-weight:700;font-size:1.2rem;color:#2563eb}
+.nav-link{margin:0 12px;text-decoration:none;color:#475569;font-weight:500;transition:color .3s}
+.nav-link:hover,.nav-link.active{color:#2563eb}
+main#app{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.page{position:absolute;top:0;left:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;animation:fade .4s ease}
+.page.active{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:14px;padding:32px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.05);max-width:400px;width:90%;text-align:center}
+h1,h2{margin-bottom:12px}
+.muted{color:#64748b}
+.form{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+input,select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:1rem}
+.btn{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all .3s}
+.btn.primary{background:#2563eb;color:#fff}
+.btn.primary:hover{background:#1e4fd6}
+.btn.ghost{background:transparent;border:1px solid #2563eb;color:#2563eb}
+.btn.ghost:hover{background:#eff6ff}
+.icon-btn i{font-size:1.3rem;margin-right:8px;vertical-align:middle}
+.role-buttons{display:flex;gap:20px;justify-content:center;margin-top:20px}
+.samples{display:flex;gap:12px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.samples img{width:100px;height:130px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:0.3s}
+.samples img:hover{border-color:#2563eb;transform:scale(1.05)}
+.summary-box{text-align:left;background:#f8fafc;padding:16px;border-radius:8px;border:1px solid #e2e8f0;margin:12px 0}
+footer{text-align:center;padding:16px;color:#94a3b8;font-size:.9rem;border-top:1px solid #e2e8f0;background:#ffffff}
+.small{font-size:0.9rem;color:#64748b}
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Educycle</div>
+    <nav>
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- Home Section -->
+    <section class="page active" id="home">
+      <div class="card center">
+        <h1>Welcome to Educycle</h1>
+        <p class="muted">A professional platform for donating and receiving study books.</p>
+        <button id="startBtn" class="btn primary">Start Now</button>
+      </div>
+    </section>
+
+    <!-- Sign In Section -->
+    <section class="page" id="signin">
+      <div class="card center">
+        <h2>Sign In</h2>
+        <form id="signinForm" class="form">
+          <label>Name</label>
+          <input type="text" id="name" placeholder="Enter your name" required>
+          <label>Password</label>
+          <input type="password" id="pwd" placeholder="Enter password (optional)">
+          <button type="submit" class="btn primary">Continue</button>
+          <button type="button" id="guestLogin" class="btn ghost">Guest Login</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Role Selection -->
+    <section class="page" id="role">
+      <div class="card center">
+        <h2>Select Your Role</h2>
+        <div class="role-buttons">
+          <button id="donorBtn" class="btn icon-btn">Donor</button>
+          <button id="receiverBtn" class="btn icon-btn">Receiver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standard & Subject -->
+    <section class="page" id="select">
+      <div class="card center">
+        <h2>Choose Standard & Subject</h2>
+        <div class="form">
+          <label>Standard</label>
+          <select id="standardSelect">
+            <option value="">-- Select Standard --</option>
+            <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+          </select>
+          <label>Subject</label>
+          <select id="subjectSelect"><option value="">-- Select Subject --</option></select>
+          <button id="nextUpload" class="btn primary">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload / Choose Book -->
+    <section class="page" id="upload">
+      <div class="card center">
+        <h2>Upload or Choose Book</h2>
+        <input type="file" id="fileInput" accept="image/*">
+        <p class="muted small">or choose from samples:</p>
+        <div id="bookSamples" class="samples"></div>
+        <button id="finishBtn" class="btn primary">Finish</button>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="page" id="summary">
+      <div class="card center">
+        <h2>Summary</h2>
+        <div id="summaryBox" class="summary-box"></div>
+        <button id="restartBtn" class="btn ghost">Start Over</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Educycle | Designed for students & donors</p>
+  </footer>
+
+  <script>
+/* Embedded JS */
+const pages = document.querySelectorAll('.page');
+function showPage(id){pages.forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+
+// navigation
+document.getElementById('startBtn').onclick = ()=>showPage('signin');
+
+document.getElementById('signinForm').onsubmit = e=>{
+  e.preventDefault();
+  const name=document.getElementById('name').value.trim()||'Guest';
+  localStorage.setItem('educycle_name',name);
+  showPage('role');
+};
+document.getElementById('guestLogin').onclick=()=>{localStorage.setItem('educycle_name','Guest');showPage('role');};
+
+document.getElementById('donorBtn').onclick=()=>{localStorage.setItem('educycle_role','Donor');showPage('select');};
+document.getElementById('receiverBtn').onclick=()=>{localStorage.setItem('educycle_role','Receiver');showPage('select');};
+
+// standard-subject
+const subjects = {1:['General'],2:['General'],3:['Math','Science','English'],4:['Math','Science','English'],5:['Math','Science','English'],6:['Math','Science','Social','English'],7:['Math','Science','Social','English'],8:['Math','Science','Social','English'],9:['Math','Science','Social','English'],10:['Math','Science','Social','English'],11:['Physics','Chemistry','Biology','Math','Computer'],12:['Physics','Chemistry','Biology','Math','Computer']};
+
+document.getElementById('standardSelect').addEventListener('change',e=>{
+  const std=e.target.value;
+  const subj=document.getElementById('subjectSelect');
+  subj.innerHTML='<option value="">-- Select Subject --</option>';
+  if(subjects[std])subjects[std].forEach(s=>subj.innerHTML+=`<option>${s}</option>`);
+});
+
+document.getElementById('nextUpload').onclick=()=>{localStorage.setItem('educycle_std',document.getElementById('standardSelect').value);localStorage.setItem('educycle_sub',document.getElementById('subjectSelect').value);showPage('upload');};
+
+// sample books
+const bookSamples=document.getElementById('bookSamples');
+const samples=[{name:'Math Book',src:'https://via.placeholder.com/100x130?text=Math'},{name:'Science Book',src:'https://via.placeholder.com/100x130?text=Science'},{name:'English Book',src:'https://via.placeholder.com/100x130?text=English'}];
+samples.forEach(b=>{const img=document.createElement('img');img.src=b.src;img.alt=b.name;img.onclick=()=>{localStorage.setItem('educycle_book',b.name);finish()};bookSamples.appendChild(img);});
+
+document.getElementById('finishBtn').onclick=()=>{const file=document.getElementById('fileInput').files[0];if(file){localStorage.setItem('educycle_book',file.name);}finish();};
+
+function finish(){
+  const summary=document.getElementById('summaryBox');
+  summary.innerHTML=`<p><strong>Name:</strong> ${localStorage.getItem('educycle_name')}</p>
+  <p><strong>Role:</strong> ${localStorage.getItem('educycle_role')}</p>
+  <p><strong>Standard:</strong> ${localStorage.getItem('educycle_std')}</p>
+  <p><strong>Subject:</strong> ${localStorage.getItem('educycle_sub')}</p>
+  <p><strong>Book:</strong> ${localStorage.getItem('educycle_book')}</p>`;
+  showPage('summary');
+}
+document.getElementById('restartBtn').onclick=()=>{localStorage.clear();showPage('home');};
+  </script>
+</body>
+</html>
